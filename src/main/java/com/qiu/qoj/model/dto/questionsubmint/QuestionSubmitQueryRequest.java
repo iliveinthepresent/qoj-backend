@@ -6,14 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 查询请求
- *
- * 
- * 
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -39,7 +34,6 @@ public class QuestionSubmitQueryRequest extends PageRequest implements Serializa
      * 创建用户 id
      */
     private Long userId;
-
 
 
     @TableField(exist = false)

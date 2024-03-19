@@ -18,6 +18,7 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
 
     /**
      * 执行判题
+     *
      * @param judgeContext
      * @return
      */
@@ -25,7 +26,7 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
     public JudgeInfo doJudge(JudgeContext judgeContext) {
         JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         JudgeInfo judgeInfoResponse = new JudgeInfo();
-        if(judgeInfo == null) {
+        if (judgeInfo == null) {
             judgeInfoResponse.setMessage(JudgeInfoMessageEnum.COMPILE_ERROR.getValue());
             return judgeInfoResponse;
         }

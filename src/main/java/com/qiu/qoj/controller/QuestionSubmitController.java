@@ -1,13 +1,10 @@
 package com.qiu.qoj.controller;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qiu.qoj.common.BaseResponse;
 import com.qiu.qoj.common.ErrorCode;
 import com.qiu.qoj.common.ResultUtils;
 import com.qiu.qoj.exception.BusinessException;
-import com.qiu.qoj.model.dto.questionsubmint.JudgeInfo;
 import com.qiu.qoj.model.dto.questionsubmint.QuestionSubmitAddRequest;
 import com.qiu.qoj.model.dto.questionsubmint.QuestionSubmitQueryRequest;
 import com.qiu.qoj.model.entity.QuestionSubmit;
@@ -17,7 +14,6 @@ import com.qiu.qoj.model.vo.QuestionSubmitVO;
 import com.qiu.qoj.service.QuestionSubmitService;
 import com.qiu.qoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,9 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 题目提交接口
- *
- * 
- *
  */
 @RestController
 @RequestMapping("/question_submit")

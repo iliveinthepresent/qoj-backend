@@ -2,12 +2,10 @@ package com.qiu.qoj.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qiu.qoj.constant.QuestionConstant;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.qiu.qoj.model.dto.question.QuestionQueryRequest;
 import com.qiu.qoj.model.entity.Question;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.qiu.qoj.model.vo.QuestionVO;
-import springfox.documentation.annotations.Cacheable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -59,7 +57,7 @@ public interface QuestionService extends IService<Question> {
 
     Question getByIdUseCache(long id);
 
-//    @Cacheable(value = "Test")
+    //    @Cacheable(value = "Test")
 //    @Cacheable(value = QuestionConstant.CACHE_QUESTION_SIMPLE_PAGE)
     Page<Question> simplePageUseCache(long current, long size);
 }

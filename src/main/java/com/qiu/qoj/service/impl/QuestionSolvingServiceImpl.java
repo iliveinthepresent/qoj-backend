@@ -107,7 +107,7 @@ public class QuestionSolvingServiceImpl extends ServiceImpl<QuestionSolvingMappe
             questionSolvingPageVO.setUserVO(userVO);
             String key = QuestionSolvingConstant.QUESTION_SOLVING_PAGE_VIEW_KEY + questionSolving.getId();
             String pageView = stringRedisTemplate.opsForValue().get(key);
-            if(pageView != null) {
+            if (pageView != null) {
                 questionSolvingPageVO.setPageView(Integer.parseInt(pageView));
             }
 
@@ -126,15 +126,15 @@ public class QuestionSolvingServiceImpl extends ServiceImpl<QuestionSolvingMappe
         Long userId = loginUser.getId();
         // 用Redis判断用户是否已支持
         Boolean existed = stringRedisTemplate.opsForSet().isMember(key, userId.toString());
-        if(BooleanUtil.isFalse(existed)) {
+        if (BooleanUtil.isFalse(existed)) {
             // 未支持，那就可以支持
             boolean successed = update().setSql("supportNumber = supportNumber + 1").eq("id", questionSolvingId).update();
-            if(successed) {
+            if (successed) {
                 stringRedisTemplate.opsForSet().add(key, userId.toString());
             }
         } else {
             boolean successed = update().setSql("supportNumber = supportNumber - 1").eq("id", questionSolvingId).update();
-            if(successed) {
+            if (successed) {
                 stringRedisTemplate.opsForSet().remove(key, userId.toString());
             }
         }

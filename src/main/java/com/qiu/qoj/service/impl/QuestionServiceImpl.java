@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -190,11 +189,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 //            }
 //            questionVO.setUserVO(userService.getUserVO(user));
             Double submitNumber = stringRedisTemplate.opsForZSet().score(QuestionConstant.QUESTION_SUBMIT_NUMBER, question.getId().toString());
-            if(submitNumber != null) {
+            if (submitNumber != null) {
                 questionVO.setSubmitNum(submitNumber.intValue());
             }
             String acceptedNumber = stringRedisTemplate.opsForValue().get(QuestionConstant.QUESTION_ACCEPTED_NUMBER + question.getId());
-            if(acceptedNumber != null) {
+            if (acceptedNumber != null) {
                 questionVO.setAcceptedNum(Integer.parseInt(acceptedNumber));
             }
 //            questionVO.setHasThumb(questionIdHasThumbMap.getOrDefault(question.getId(), false));

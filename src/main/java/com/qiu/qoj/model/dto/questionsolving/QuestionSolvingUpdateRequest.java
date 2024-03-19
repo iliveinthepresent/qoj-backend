@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class QuestionSolvingUpdateRequest {
 
@@ -25,7 +23,6 @@ public class QuestionSolvingUpdateRequest {
      * 内容
      */
     private String text;
-
 
 
     @TableField(exist = false)

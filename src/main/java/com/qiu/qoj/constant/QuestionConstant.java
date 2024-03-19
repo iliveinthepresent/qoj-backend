@@ -2,9 +2,6 @@ package com.qiu.qoj.constant;
 
 /**
  * 通用常量
- *
- * 
- * 
  */
 public interface QuestionConstant {
 
@@ -27,5 +24,5 @@ public interface QuestionConstant {
     String CACHE_QUESTION_SIMPLE_PAGE = "cache:question:simplePage";
 
     Long CACHE_QUESTION_TTL = 2L;
-    
+
 }

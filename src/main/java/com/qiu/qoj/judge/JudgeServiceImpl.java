@@ -64,7 +64,7 @@ public class JudgeServiceImpl implements JudgeService {
         }
         // 3）更改判题（题目提交）的状态为 “判题中”，防止重复执行
         String submitStateKey = QuestionSubmitConstant.QUESTION_SUBMIT_STATE_KEY + questionSubmit.getId();
-        stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.RUNNING.getValue().toString(),5, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.RUNNING.getValue().toString(), 5, TimeUnit.MINUTES);
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.RUNNING.getValue());
@@ -100,13 +100,13 @@ public class JudgeServiceImpl implements JudgeService {
         // 6）修改数据库中的判题结果
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
-        if("Wrong Answer".equals(judgeInfo.getMessage()) || "编译错误".equals(judgeInfo.getMessage())) {
+        if ("Wrong Answer".equals(judgeInfo.getMessage()) || "编译错误".equals(judgeInfo.getMessage())) {
             questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
-            stringRedisTemplate.opsForValue().set(submitStateKey,QuestionSubmitStatusEnum.FAILED.getValue().toString(),5, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.FAILED.getValue().toString(), 5, TimeUnit.MINUTES);
 
         } else {
             questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCESS.getValue());
-            stringRedisTemplate.opsForValue().set(submitStateKey,QuestionSubmitStatusEnum.SUCCESS.getValue().toString(),5, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.SUCCESS.getValue().toString(), 5, TimeUnit.MINUTES);
             String key = QuestionConstant.QUESTION_ACCEPTED_NUMBER + questionId;
             stringRedisTemplate.opsForValue().increment(key);
         }

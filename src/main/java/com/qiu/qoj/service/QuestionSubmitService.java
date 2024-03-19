@@ -2,20 +2,19 @@ package com.qiu.qoj.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.qiu.qoj.model.dto.questionsubmint.QuestionSubmitAddRequest;
 import com.qiu.qoj.model.dto.questionsubmint.QuestionSubmitQueryRequest;
 import com.qiu.qoj.model.entity.QuestionSubmit;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.qiu.qoj.model.entity.User;
 import com.qiu.qoj.model.vo.QuestionSubmitStateVO;
 import com.qiu.qoj.model.vo.QuestionSubmitVO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
-* @author 10692
-* @description 针对表【question_submit(题目提交)】的数据库操作Service
-* @createDate 2023-12-11 19:31:25
-*/
+ * @author 10692
+ * @description 针对表【question_submit(题目提交)】的数据库操作Service
+ * @createDate 2023-12-11 19:31:25
+ */
 public interface QuestionSubmitService extends IService<QuestionSubmit> {
     /**
      * 题目提交
@@ -62,7 +61,7 @@ public interface QuestionSubmitService extends IService<QuestionSubmit> {
      */
     Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser);
 
-     Integer getQuestionSubmitState(Long questionSubmitId);
+    Integer getQuestionSubmitState(Long questionSubmitId);
 
     QuestionSubmitStateVO getJudgeInformation(Long questionSubmitId);
 }

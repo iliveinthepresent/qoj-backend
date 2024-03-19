@@ -19,12 +19,10 @@ import com.qiu.qoj.service.QuestionService;
 import com.qiu.qoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.Cacheable;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

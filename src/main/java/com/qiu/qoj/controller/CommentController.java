@@ -1,7 +1,6 @@
 package com.qiu.qoj.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.Gson;
 import com.qiu.qoj.common.BaseResponse;
 import com.qiu.qoj.common.DeleteRequest;
 import com.qiu.qoj.common.ErrorCode;
@@ -92,7 +91,6 @@ public class CommentController {
     }
 
 
-
     /**
      * 分页获取题解列表
      *
@@ -116,7 +114,6 @@ public class CommentController {
         Boolean success = commentService.likeComment(id, httpServletRequest);
         return ResultUtils.success(null);
     }
-
 
 
 }

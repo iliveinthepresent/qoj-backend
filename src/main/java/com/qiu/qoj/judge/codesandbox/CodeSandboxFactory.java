@@ -1,6 +1,5 @@
 package com.qiu.qoj.judge.codesandbox;
 
-import com.qiu.qoj.judge.codesandbox.CodeSandbox;
 import com.qiu.qoj.judge.codesandbox.impl.ExampleCodeSandbox;
 import com.qiu.qoj.judge.codesandbox.impl.RemoteCodeSandbox;
 import com.qiu.qoj.judge.codesandbox.impl.ThirdPartyCodeSandbox;

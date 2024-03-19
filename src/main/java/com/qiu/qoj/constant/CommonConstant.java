@@ -2,9 +2,6 @@ package com.qiu.qoj.constant;
 
 /**
  * 通用常量
- *
- * 
- * 
  */
 public interface CommonConstant {
 
@@ -19,5 +16,5 @@ public interface CommonConstant {
     String SORT_ORDER_DESC = " descend";
 
     String COMMENT_LIKED_KEY = "comment:liked:";
-    
+
 }

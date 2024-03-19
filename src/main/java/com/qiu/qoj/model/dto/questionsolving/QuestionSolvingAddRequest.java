@@ -3,19 +3,12 @@ package com.qiu.qoj.model.dto.questionsolving;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.qiu.qoj.model.dto.question.JudgeCase;
-import com.qiu.qoj.model.dto.question.JudgeConfig;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 创建请求
- *
- * 
- * 
  */
 @Data
 public class QuestionSolvingAddRequest implements Serializable {

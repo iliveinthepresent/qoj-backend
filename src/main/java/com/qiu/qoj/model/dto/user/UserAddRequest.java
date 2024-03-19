@@ -1,13 +1,11 @@
 package com.qiu.qoj.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 用户创建请求
- *
- * 
- * 
  */
 @Data
 public class UserAddRequest implements Serializable {

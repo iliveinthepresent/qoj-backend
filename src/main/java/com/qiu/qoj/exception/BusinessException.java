@@ -4,9 +4,6 @@ import com.qiu.qoj.common.ErrorCode;
 
 /**
  * 自定义异常类
- *
- * 
- * 
  */
 public class BusinessException extends RuntimeException {
 

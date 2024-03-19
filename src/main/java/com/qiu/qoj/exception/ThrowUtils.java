@@ -4,9 +4,6 @@ import com.qiu.qoj.common.ErrorCode;
 
 /**
  * 抛异常工具类
- *
- * 
- * 
  */
 public class ThrowUtils {
 

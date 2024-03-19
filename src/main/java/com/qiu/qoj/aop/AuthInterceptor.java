@@ -6,9 +6,6 @@ import com.qiu.qoj.exception.BusinessException;
 import com.qiu.qoj.model.entity.User;
 import com.qiu.qoj.model.enums.UserRoleEnum;
 import com.qiu.qoj.service.UserService;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,11 +15,11 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 权限校验 AOP
- *
- * 
- * 
  */
 @Aspect
 @Component
@@ -54,7 +51,7 @@ public class AuthInterceptor {
             String userRole = loginUser.getUserRole();
             // 如果被封号，直接拒绝
             if (UserRoleEnum.BAN.equals(mustUserRoleEnum)) {
-                if(mustRole.equals(userRole)) {
+                if (mustRole.equals(userRole)) {
                     throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
                 }
             }

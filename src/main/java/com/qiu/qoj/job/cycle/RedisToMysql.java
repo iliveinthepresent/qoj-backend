@@ -1,7 +1,6 @@
 package com.qiu.qoj.job.cycle;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.qiu.qoj.constant.QuestionConstant;
 import com.qiu.qoj.model.entity.Question;
 import com.qiu.qoj.service.QuestionService;
@@ -12,10 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
-// todo 取消注释开启任务
 @Component
 @Slf4j
 public class RedisToMysql {
@@ -25,6 +22,7 @@ public class RedisToMysql {
 
     @Resource
     private QuestionService questionService;
+
     /**
      * 每分钟执行一次
      */
@@ -38,7 +36,7 @@ public class RedisToMysql {
             questionTemp = new Question();
             questionTemp.setId(question.getId());
             Double score = stringRedisTemplate.opsForZSet().score(QuestionConstant.QUESTION_SUBMIT_NUMBER, question.getId().toString());
-            if(score == null) {
+            if (score == null) {
                 continue;
             }
             int sumbit = score.intValue();

@@ -1,11 +1,7 @@
 package com.qiu.qoj.model.vo;
 
-import cn.hutool.json.JSONUtil;
-import com.qiu.qoj.model.dto.questionsubmint.JudgeInfo;
-import com.qiu.qoj.model.entity.QuestionSolving;
 import com.qiu.qoj.service.UserService;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;

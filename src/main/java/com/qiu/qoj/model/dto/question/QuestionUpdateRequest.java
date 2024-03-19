@@ -1,19 +1,12 @@
 package com.qiu.qoj.model.dto.question;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
  * 更新请求
- *
- * 
- * 
  */
 @Data
 public class QuestionUpdateRequest implements Serializable {
@@ -53,7 +46,6 @@ public class QuestionUpdateRequest implements Serializable {
      * 判题配置（json 对象）
      */
     private JudgeConfig judgeConfig;
-
 
 
     private static final long serialVersionUID = 1L;

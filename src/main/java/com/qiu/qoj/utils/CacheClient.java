@@ -3,16 +3,11 @@ package com.qiu.qoj.utils;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.stream.MapRecord;
-import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.convert.RedisData;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +33,6 @@ public class CacheClient {
     }
 
 
-
 //    public void setWithLogicalExpire(String key, Object value, Long time, TimeUnit unit) {
 //        // 设置逻辑过期
 //        RedisData redisData = new RedisData();
@@ -50,15 +44,16 @@ public class CacheClient {
 
     /**
      * 解决缓存穿透
+     *
      * @param keyPrefix
      * @param id
      * @param type
      * @param dbFallback
      * @param time
      * @param unit
-     * @return
      * @param <R>
      * @param <ID>
+     * @return
      */
     public <R, ID> R queryWithPassThrough(
             String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time, TimeUnit unit) {

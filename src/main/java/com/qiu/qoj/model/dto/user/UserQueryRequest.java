@@ -1,16 +1,13 @@
 package com.qiu.qoj.model.dto.user;
 
 import com.qiu.qoj.common.PageRequest;
-
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * 用户查询请求
- *
- * 
- * 
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

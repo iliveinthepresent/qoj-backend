@@ -2,9 +2,6 @@ package com.qiu.qoj.common;
 
 /**
  * 自定义错误码
- *
- * 
- * 
  */
 public enum ErrorCode {
 

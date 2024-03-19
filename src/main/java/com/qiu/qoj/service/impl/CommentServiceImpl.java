@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiu.qoj.constant.CommonConstant;
+import com.qiu.qoj.mapper.CommentMapper;
 import com.qiu.qoj.model.dto.comment.CommentQueryRequest;
 import com.qiu.qoj.model.entity.Comment;
 import com.qiu.qoj.model.entity.User;
 import com.qiu.qoj.model.vo.CommentVO;
 import com.qiu.qoj.service.CommentService;
-import com.qiu.qoj.mapper.CommentMapper;
 import com.qiu.qoj.service.UserService;
 import com.qiu.qoj.utils.SqlUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,13 +28,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
-* @author 10692
-* @description 针对表【comment(评论表)】的数据库操作Service实现
-* @createDate 2023-12-31 11:52:53
-*/
+ * @author 10692
+ * @description 针对表【comment(评论表)】的数据库操作Service实现
+ * @createDate 2023-12-31 11:52:53
+ */
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
-    implements CommentService{
+        implements CommentService {
 
     @Resource
     private UserService userService;
@@ -56,11 +56,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         Long fatherCommentId = commentQueryRequest.getFatherCommentId();
         String sortField = commentQueryRequest.getSortField();
         String sortOrder = commentQueryRequest.getSortOrder();
-        
-        
+
+
         // 拼接查询条件
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
-        
+
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionSolvingId), "questionSolvingId", questionSolvingId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(fatherCommentId), "fatherCommentId", fatherCommentId);
@@ -128,7 +128,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
 
     /**
      * 给评论点赞
-     * @param commentId 评论ID
+     *
+     * @param commentId          评论ID
      * @param httpServletRequest
      */
     @Override
@@ -138,15 +139,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         Long userId = loginUser.getId();
         // 用Redis判断用户是否已点赞
         Boolean existed = stringRedisTemplate.opsForSet().isMember(key, userId.toString());
-        if(BooleanUtil.isFalse(existed)) {
+        if (BooleanUtil.isFalse(existed)) {
             // 未点赞，那就可以点赞
             boolean successed = update().setSql("thumbNum = thumbNum + 1").eq("id", commentId).update();
-            if(successed) {
+            if (successed) {
                 stringRedisTemplate.opsForSet().add(key, userId.toString());
             }
         } else {
             boolean successed = update().setSql("thumbNum = thumbNum - 1").eq("id", commentId).update();
-            if(successed) {
+            if (successed) {
                 stringRedisTemplate.opsForSet().remove(key, userId.toString());
             }
         }

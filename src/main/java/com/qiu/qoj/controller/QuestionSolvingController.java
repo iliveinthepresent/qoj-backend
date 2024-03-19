@@ -7,7 +7,6 @@ import com.qiu.qoj.common.BaseResponse;
 import com.qiu.qoj.common.DeleteRequest;
 import com.qiu.qoj.common.ErrorCode;
 import com.qiu.qoj.common.ResultUtils;
-import com.qiu.qoj.constant.QuestionConstant;
 import com.qiu.qoj.constant.QuestionSolvingConstant;
 import com.qiu.qoj.exception.BusinessException;
 import com.qiu.qoj.exception.ThrowUtils;
@@ -21,8 +20,6 @@ import com.qiu.qoj.service.QuestionSolvingService;
 import com.qiu.qoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +41,8 @@ public class QuestionSolvingController {
     @Resource
     private UserService userService;
 
-    @Resource StringRedisTemplate stringRedisTemplate;
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
 
     private final static Gson GSON = new Gson();
 
@@ -115,7 +113,6 @@ public class QuestionSolvingController {
         }
 
 
-
         // todo 参数校验
 
         // 只有本人或管理员可修改
@@ -125,7 +122,7 @@ public class QuestionSolvingController {
         Long oldQuestionSolvingUserId = oldQuestionSolving.getUserId();
         User loginUser = userService.getLoginUser(httpServletRequest);
         Long newQuestionSolvingUserId = loginUser.getId();
-        if(!oldQuestionSolvingUserId.equals(newQuestionSolvingUserId) &&!userService.isAdmin(httpServletRequest)) {
+        if (!oldQuestionSolvingUserId.equals(newQuestionSolvingUserId) && !userService.isAdmin(httpServletRequest)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         QuestionSolving questionSolving = new QuestionSolving();
@@ -152,7 +149,7 @@ public class QuestionSolvingController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         QuestionSolving res = questionSolvingService.getOne(queryWrapper);
-        if(res == null) {
+        if (res == null) {
             return ResultUtils.error(ErrorCode.NOT_FOUND_ERROR);
         }
         String key = QuestionSolvingConstant.QUESTION_SOLVING_PAGE_VIEW_KEY + questionSolvingQueryRequest.getId();
@@ -176,6 +173,7 @@ public class QuestionSolvingController {
 
     /**
      * 赞同题解
+     *
      * @param id
      * @param httpServletRequest
      * @return

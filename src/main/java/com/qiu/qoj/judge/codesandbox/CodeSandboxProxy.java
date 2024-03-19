@@ -1,6 +1,5 @@
 package com.qiu.qoj.judge.codesandbox;
 
-import com.qiu.qoj.judge.codesandbox.CodeSandbox;
 import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeResponse;
 import lombok.extern.slf4j.Slf4j;

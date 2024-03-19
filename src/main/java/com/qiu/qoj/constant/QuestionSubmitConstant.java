@@ -2,9 +2,6 @@ package com.qiu.qoj.constant;
 
 /**
  * 用户常量
- *
- * 
- * 
  */
 public interface QuestionSubmitConstant {
 

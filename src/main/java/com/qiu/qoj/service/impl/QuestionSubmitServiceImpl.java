@@ -1,6 +1,5 @@
 package com.qiu.qoj.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -197,8 +196,6 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     }
 
 
-
-
     /**
      * 获取查询包装类
      *
@@ -258,7 +255,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     public Integer getQuestionSubmitState(Long questionSubmitId) {
         String submitStateKey = QuestionSubmitConstant.QUESTION_SUBMIT_STATE_KEY + questionSubmitId;
         String res = stringRedisTemplate.opsForValue().get(submitStateKey);
-        if(StringUtils.isBlank(res)) {
+        if (StringUtils.isBlank(res)) {
             res = "0";
         }
         return Integer.parseInt(res);

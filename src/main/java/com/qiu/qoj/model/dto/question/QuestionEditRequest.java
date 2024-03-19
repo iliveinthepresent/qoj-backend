@@ -1,19 +1,12 @@
 package com.qiu.qoj.model.dto.question;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
  * 编辑请求
- *
- * 
- * 
  */
 @Data
 public class QuestionEditRequest implements Serializable {

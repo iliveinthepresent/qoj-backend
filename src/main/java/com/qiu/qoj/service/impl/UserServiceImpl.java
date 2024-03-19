@@ -16,7 +16,6 @@ import com.qiu.qoj.model.vo.LoginUserVO;
 import com.qiu.qoj.model.vo.UserVO;
 import com.qiu.qoj.service.UserService;
 import com.qiu.qoj.utils.SqlUtils;
-import javafx.scene.input.DataFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,18 +23,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * 用户服务实现
- *
- * 
- * 
  */
 @Service
 @Slf4j

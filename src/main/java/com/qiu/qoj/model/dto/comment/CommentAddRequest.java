@@ -1,18 +1,12 @@
 package com.qiu.qoj.model.dto.comment;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 创建请求
- *
- * 
- * 
  */
 @Data
 public class CommentAddRequest implements Serializable {
@@ -31,7 +25,6 @@ public class CommentAddRequest implements Serializable {
      * 父评论 id
      */
     private Long fatherCommentId;
-
 
 
     @TableField(exist = false)

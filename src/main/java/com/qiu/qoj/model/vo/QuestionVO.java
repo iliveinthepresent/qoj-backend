@@ -1,11 +1,6 @@
 package com.qiu.qoj.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.gson.reflect.TypeToken;
 import com.qiu.qoj.model.dto.question.JudgeConfig;
 import com.qiu.qoj.model.entity.Question;
 import lombok.Data;
@@ -17,6 +12,7 @@ import java.util.List;
 
 /**
  * 题目封装类
+ *
  * @TableName question
  */
 
@@ -109,7 +105,7 @@ public class QuestionVO implements Serializable {
             question.setTags(JSONUtil.toJsonStr(tagList));
         }
         JudgeConfig judgeConfigVO = questionVO.getJudgeConfig();
-        if (judgeConfigVO!= null) {
+        if (judgeConfigVO != null) {
             question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfigVO));
         }
 

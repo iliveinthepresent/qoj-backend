@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * 题目接口
  */
 @RestController
-@RequestMapping("/inner/question")
+@RequestMapping("/inner")
 @Slf4j
 public class QuestionInnerController implements QuestionFeignClient {
 

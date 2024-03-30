@@ -21,6 +21,7 @@ import com.qiu.qojbackendmodel.enums.QuestionSubmitStatusEnum;
 import com.qiu.qojbackendmodel.vo.QuestionSubmitStateVO;
 import com.qiu.qojbackendmodel.vo.QuestionSubmitVO;
 import com.qiu.qojbackendquestionsubmitservice.mapper.QuestionSubmitMapper;
+import com.qiu.qojbackendquestionsubmitservice.message.MessageProducer;
 import com.qiu.qojbackendquestionsubmitservice.service.QuestionSubmitService;
 import com.qiu.qojbackendserviceclient.service.JudgeFeignClient;
 import com.qiu.qojbackendserviceclient.service.QuestionFeignClient;
@@ -29,15 +30,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.Duration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -65,77 +62,80 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    private MessageProducer messageProducer;
+
     private static final ExecutorService QUESTION_SUBMIT_EXECUTOR = Executors.newSingleThreadExecutor();
 
 //    @PostConstruct
-    private void init() {
-        QUESTION_SUBMIT_EXECUTOR.submit(new QUESTIONSUBMITHandler());
-    }
-
-    private class QUESTIONSUBMITHandler implements Runnable {
-
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    // 1.获取消息队列中的题目提交信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS s1 >
-                    List<MapRecord<String, Object, Object>> list = stringRedisTemplate.opsForStream().read(
-                            Consumer.from("g1", "c1"),
-                            StreamReadOptions.empty().count(1).block(Duration.ofSeconds(2)),
-                            StreamOffset.create("stream.questionSubmit", ReadOffset.lastConsumed())
-                    );
-                    // 2.判断题目提交信息是否为空
-                    if (list == null || list.isEmpty()) {
-                        // 如果为null，说明没有消息，继续下一次循环
-                        continue;
-                    }
-                    // 解析数据
-                    MapRecord<String, Object, Object> record = list.get(0);
-
-                    Map<Object, Object> value = record.getValue();
-                    Long questionSubmitId = Long.parseLong(value.get("questionSubmitId").toString());
-//                    // 3.进行处理
-                    judgeFeignClient.doJudge(questionSubmitId);
-
-                    // 4.确认消息 XACK
-                    stringRedisTemplate.opsForStream().acknowledge("s1", "g1", record.getId());
-                } catch (Exception e) {
-                    log.error("处理订单异常", e);
-//                    handlePendingList();
-                }
-            }
-        }
-
-        private void handlePendingList() {
-            while (true) {
-                try {
-                    // 1.获取pending-list中的题目提交信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS s1 0
-                    List<MapRecord<String, Object, Object>> list = stringRedisTemplate.opsForStream().read(
-                            Consumer.from("g1", "c1"),
-                            StreamReadOptions.empty().count(1),
-                            StreamOffset.create("stream.questionSubmit", ReadOffset.from("0"))
-                    );
-                    // 2.判断题目提交信息是否为空
-                    if (list == null || list.isEmpty()) {
-                        // 如果为null，说明没有异常消息，结束循环
-                        break;
-                    }
-                    // 解析数据
-                    MapRecord<String, Object, Object> record = list.get(0);
-
-                    Map<Object, Object> value = record.getValue();
-                    Long questionSubmitId = Long.parseLong(value.get("questionSubmitId").toString());
-//                    // 3.进行处理
-                    judgeFeignClient.doJudge(questionSubmitId);
-
-                    // 4.确认消息 XACK
-                    stringRedisTemplate.opsForStream().acknowledge("s1", "g1", record.getId());
-                } catch (Exception e) {
-                    log.error("处理订单异常", e);
-                }
-            }
-        }
-    }
+//    private void init() {
+//        QUESTION_SUBMIT_EXECUTOR.submit(new QUESTIONSUBMITHandler());
+//    }
+//
+//    private class QUESTIONSUBMITHandler implements Runnable {
+//
+//        @Override
+//        public void run() {
+//            while (true) {
+//                try {
+//                    // 1.获取消息队列中的题目提交信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS s1 >
+//                    List<MapRecord<String, Object, Object>> list = stringRedisTemplate.opsForStream().read(
+//                            Consumer.from("g1", "c1"),
+//                            StreamReadOptions.empty().count(1).block(Duration.ofSeconds(2)),
+//                            StreamOffset.create("stream.questionSubmit", ReadOffset.lastConsumed())
+//                    );
+//                    // 2.判断题目提交信息是否为空
+//                    if (list == null || list.isEmpty()) {
+//                        // 如果为null，说明没有消息，继续下一次循环
+//                        continue;
+//                    }
+//                    // 解析数据
+//                    MapRecord<String, Object, Object> record = list.get(0);
+//
+//                    Map<Object, Object> value = record.getValue();
+//                    Long questionSubmitId = Long.parseLong(value.get("questionSubmitId").toString());
+////                    // 3.进行处理
+//                    judgeFeignClient.doJudge(questionSubmitId);
+//
+//                    // 4.确认消息 XACK
+//                    stringRedisTemplate.opsForStream().acknowledge("s1", "g1", record.getId());
+//                } catch (Exception e) {
+//                    log.error("处理订单异常", e);
+////                    handlePendingList();
+//                }
+//            }
+//        }
+//
+//        private void handlePendingList() {
+//            while (true) {
+//                try {
+//                    // 1.获取pending-list中的题目提交信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS s1 0
+//                    List<MapRecord<String, Object, Object>> list = stringRedisTemplate.opsForStream().read(
+//                            Consumer.from("g1", "c1"),
+//                            StreamReadOptions.empty().count(1),
+//                            StreamOffset.create("stream.questionSubmit", ReadOffset.from("0"))
+//                    );
+//                    // 2.判断题目提交信息是否为空
+//                    if (list == null || list.isEmpty()) {
+//                        // 如果为null，说明没有异常消息，结束循环
+//                        break;
+//                    }
+//                    // 解析数据
+//                    MapRecord<String, Object, Object> record = list.get(0);
+//
+//                    Map<Object, Object> value = record.getValue();
+//                    Long questionSubmitId = Long.parseLong(value.get("questionSubmitId").toString());
+////                    // 3.进行处理
+//                    judgeFeignClient.doJudge(questionSubmitId);
+//
+//                    // 4.确认消息 XACK
+//                    stringRedisTemplate.opsForStream().acknowledge("s1", "g1", record.getId());
+//                } catch (Exception e) {
+//                    log.error("处理订单异常", e);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 提交题目
@@ -181,13 +181,13 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         String submitStateKey = QuestionSubmitConstant.QUESTION_SUBMIT_STATE_KEY + questionSubmit.getId();
         stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.WAITING.getValue().toString(), 5, TimeUnit.MINUTES);
         Long questionSubmitId = questionSubmit.getId();
-        // 异步执行判题服务
-//        CompletableFuture.runAsync(() -> {
-//            judgeService.doJudge(questionSubmitId);
-//        });
-        HashMap<Object, Object> objectObjectHashMap = new HashMap<>(1);
-        objectObjectHashMap.put("questionSubmitId", questionSubmitId.toString());
-        stringRedisTemplate.opsForStream().add("stream.questionSubmit", objectObjectHashMap);
+
+        // 发送消息
+        messageProducer.sendMessage("code_exchange", "my_routingKey", String.valueOf(questionSubmitId));
+
+//        HashMap<Object, Object> objectObjectHashMap = new HashMap<>(1);
+//        objectObjectHashMap.put("questionSubmitId", questionSubmitId.toString());
+//        stringRedisTemplate.opsForStream().add("stream.questionSubmit", objectObjectHashMap);
         // 同步执行判题服务
 //        QuestionSubmit questionSubmitResult = judgeService.doJudge(questionSubmitId);
 

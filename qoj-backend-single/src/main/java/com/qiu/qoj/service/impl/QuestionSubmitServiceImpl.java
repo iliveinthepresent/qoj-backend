@@ -189,7 +189,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         });
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>(1);
         objectObjectHashMap.put("questionSubmitId", questionSubmitId.toString());
-        stringRedisTemplate.opsForStream().add("stream.questionSubmit", objectObjectHashMap);
+//        stringRedisTemplate.opsForStream().add("stream.questionSubmit", objectObjectHashMap);
         // 同步执行判题服务
 //        QuestionSubmit questionSubmitResult = judgeService.doJudge(questionSubmitId);
 

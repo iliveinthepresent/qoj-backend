@@ -111,7 +111,7 @@ public abstract class JavaCodeSandboxTemplate implements CodeSandbox {
         List<ExecuteMessage> executeMessageList = new ArrayList<>();
         for (String inputArgs : inputList) {
 //            String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s Main %s", userCodeParentPath, inputArgs);
-            String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s Main %s", userCodeParentPath, inputArgs);
+            String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s Main", userCodeParentPath);
             try {
                 Process runProcess = Runtime.getRuntime().exec(runCmd);
                 // 超时控制
@@ -124,7 +124,7 @@ public abstract class JavaCodeSandboxTemplate implements CodeSandbox {
                         throw new RuntimeException(e);
                     }
                 }).start();
-                ExecuteMessage executeMessage = ProcessUtils.runProcessAndGetMessage(runProcess, "运行");
+                ExecuteMessage executeMessage = ProcessUtils.runInteractProcessAndGetMessage(runProcess, inputArgs);
                 System.out.println(executeMessage);
                 executeMessageList.add(executeMessage);
             } catch (Exception e) {

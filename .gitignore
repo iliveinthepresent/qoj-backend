@@ -1,6 +1,7 @@
 ### Custom Template
 .idea
 *.iml
+tmpCode
 
 ### Java template
 # Compiled class file

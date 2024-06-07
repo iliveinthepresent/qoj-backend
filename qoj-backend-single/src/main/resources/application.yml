@@ -8,7 +8,7 @@ spring:
     name: qoj-backend
   # 默认 dev 环境
   profiles:
-    active: real
+    active: dev
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -23,11 +23,11 @@ spring:
       namespace: spring:session
       flush-mode: on_save
   # 数据库配置
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://
-    username:
-    password:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://
+#    username:
+#    password:
   # Redis 配置
   redis:
     host:

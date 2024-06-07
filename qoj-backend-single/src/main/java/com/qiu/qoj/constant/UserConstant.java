@@ -29,5 +29,7 @@ public interface UserConstant {
 
     String DEFAULT_USERNAME_PRIFIX = "用户";
 
+    String USER_VERVIFICATION_CODE_PREFIX = "user:code:";
+
     // endregion
 }

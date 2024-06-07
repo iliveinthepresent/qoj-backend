@@ -1,5 +1,6 @@
 package com.qiu.qoj.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qiu.qoj.annotation.AuthCheck;
 import com.qiu.qoj.common.BaseResponse;
@@ -77,6 +78,40 @@ public class UserController {
         }
         LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword, request);
         return ResultUtils.success(loginUserVO);
+    }
+
+    /**
+     * 用户短信登录
+     * @param userSmsLoginRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/smsLogin")
+    public BaseResponse<LoginUserVO> userSmsLogin(@RequestBody UserSmsLoginRequest userSmsLoginRequest, HttpServletRequest request) {
+        if (userSmsLoginRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String phone = userSmsLoginRequest.getPhone();
+        String verificationCode = userSmsLoginRequest.getVerificationCode();
+        if (StringUtils.isAnyBlank(phone, verificationCode)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        LoginUserVO loginUserVO = userService.userSmsLogin(phone, verificationCode, request);
+        return ResultUtils.success(loginUserVO);
+    }
+
+    /**
+     * 发送验证码
+     * @param phone
+     * @return
+     */
+    @GetMapping("/sendVerificationCode")
+    public BaseResponse<String> doSendVerificationCode(String phone) {
+        if(StrUtil.isBlank(phone)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        userService.sendVerificationCode(phone);
+        return ResultUtils.success("ok");
     }
 
     /**

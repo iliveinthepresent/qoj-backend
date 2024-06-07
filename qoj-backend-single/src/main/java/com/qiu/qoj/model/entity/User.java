@@ -70,6 +70,11 @@ public class User implements Serializable {
     private Date updateTime;
 
     /**
+     * 电话号码
+     */
+    private String phone;
+
+    /**
      * 是否删除
      */
     @TableLogic

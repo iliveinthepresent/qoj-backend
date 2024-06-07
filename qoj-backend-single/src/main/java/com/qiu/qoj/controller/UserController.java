@@ -7,21 +7,26 @@ import com.qiu.qoj.common.BaseResponse;
 import com.qiu.qoj.common.DeleteRequest;
 import com.qiu.qoj.common.ErrorCode;
 import com.qiu.qoj.common.ResultUtils;
+import com.qiu.qoj.config.CosClientConfig;
 import com.qiu.qoj.constant.UserConstant;
 import com.qiu.qoj.exception.BusinessException;
 import com.qiu.qoj.exception.ThrowUtils;
+import com.qiu.qoj.model.dto.file.UploadFileRequest;
 import com.qiu.qoj.model.dto.user.*;
 import com.qiu.qoj.model.entity.User;
 import com.qiu.qoj.model.vo.LoginUserVO;
 import com.qiu.qoj.model.vo.UserVO;
+import com.qiu.qoj.service.FileService;
 import com.qiu.qoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -34,6 +39,12 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private FileService fileService;
+
+    @Resource
+    private CosClientConfig cosClientConfig;
 
 
     // region 登录相关
@@ -300,5 +311,26 @@ public class UserController {
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+
+    @PostMapping("/uploadAvatar")
+    public BaseResponse<String> uploadAvatar(@RequestPart("file") MultipartFile multipartFile,
+                                             UploadFileRequest uploadFileRequest, HttpServletRequest request) {
+        String filePath = fileService.uploadFile(multipartFile, uploadFileRequest, request);
+        String avatarPath = cosClientConfig.getHost() + "/" + filePath;
+        User loginUser = userService.getLoginUser(request);
+        User user = new User();
+        user.setId(loginUser.getId());
+        user.setUserAvatar(avatarPath);
+        userService.updateById(user);
+        return ResultUtils.success(avatarPath);
+    }
+
+    @GetMapping("downloadAvatar")
+    public void downloadAvatar(HttpServletResponse response, HttpServletRequest request) {
+
+        User loginUser = userService.getLoginUser(request);
+        fileService.downloadFile(loginUser.getUserAvatar().replace(cosClientConfig.getHost(), "").substring(1), response);
     }
 }

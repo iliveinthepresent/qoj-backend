@@ -305,6 +305,11 @@ public class QuestionController {
     }
 
 
+    /**
+     * 获取最热门的50个题目
+     * @param httpServletRequest
+     * @return
+     */
     @GetMapping("/topFifty")
     public BaseResponse<List<QuestionVO>> getTopFifty(HttpServletRequest httpServletRequest) {
         List<QuestionVO> topFifty = questionService.getTopFifty(httpServletRequest);

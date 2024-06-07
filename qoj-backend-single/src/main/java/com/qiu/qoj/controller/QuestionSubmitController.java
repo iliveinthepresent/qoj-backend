@@ -77,11 +77,21 @@ public class QuestionSubmitController {
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
 
+    /**
+     * 获取题目的提交状态
+     * @param questionSubmitId
+     * @return
+     */
     @GetMapping("/state")
     public Integer getQuestionSubmitState(@RequestParam Long questionSubmitId) {
         return questionSubmitService.getQuestionSubmitState(questionSubmitId);
     }
 
+    /**
+     * 获取题目的提交信息
+     * @param questionSubmitId
+     * @return
+     */
     @GetMapping("/judgeInformation")
     public BaseResponse<QuestionSubmitStateVO> getJudgeInformation(@RequestParam Long questionSubmitId) {
         QuestionSubmitStateVO judgeInformation = questionSubmitService.getJudgeInformation(questionSubmitId);

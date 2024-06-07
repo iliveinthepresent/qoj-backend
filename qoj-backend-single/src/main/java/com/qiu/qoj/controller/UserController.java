@@ -314,6 +314,13 @@ public class UserController {
     }
 
 
+    /**
+     * 上传头像
+     * @param multipartFile
+     * @param uploadFileRequest
+     * @param request
+     * @return
+     */
     @PostMapping("/uploadAvatar")
     public BaseResponse<String> uploadAvatar(@RequestPart("file") MultipartFile multipartFile,
                                              UploadFileRequest uploadFileRequest, HttpServletRequest request) {
@@ -327,6 +334,11 @@ public class UserController {
         return ResultUtils.success(avatarPath);
     }
 
+    /**
+     * 下载头像
+     * @param response
+     * @param request
+     */
     @GetMapping("downloadAvatar")
     public void downloadAvatar(HttpServletResponse response, HttpServletRequest request) {
 

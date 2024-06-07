@@ -109,6 +109,12 @@ public class CommentController {
         return ResultUtils.success(commentPageVO);
     }
 
+    /**
+     * 给评论点赞
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
     @PutMapping("/like/{id}")
     public BaseResponse likeComment(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
         Boolean success = commentService.likeComment(id, httpServletRequest);

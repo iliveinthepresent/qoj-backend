@@ -173,7 +173,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (verificationCodeInRedis != null) {
             String[] split = verificationCodeInRedis.split("-");
             Long timeOfSent = Long.valueOf(split[1]);
-            if(System.currentTimeMillis() - timeOfSent > 60 * 1000) {
+            if(System.currentTimeMillis() - timeOfSent <= 60 * 1000) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码发送过于频繁");
             }
         }

@@ -31,5 +31,12 @@ public interface UserConstant {
 
     String USER_VERVIFICATION_CODE_PREFIX = "user:code:";
 
+
+
     // endregion
+
+    String USER_AVATAR_SET = "user:avatar";
+    String USER_AVATAR_DB_SET = "user:avatar:db";
+
+
 }

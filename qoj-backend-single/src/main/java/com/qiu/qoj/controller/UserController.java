@@ -330,7 +330,8 @@ public class UserController {
         User user = new User();
         user.setId(loginUser.getId());
         user.setUserAvatar(avatarPath);
-        userService.updateById(user);
+        String oldUserAvatar = loginUser.getUserAvatar();
+        userService.uploadAvatar(user, filePath, oldUserAvatar);
         return ResultUtils.success(avatarPath);
     }
 

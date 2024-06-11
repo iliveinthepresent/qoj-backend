@@ -121,4 +121,11 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 上传头像
+     * @param user
+     * @param filePath
+     */
+    void uploadAvatar(User user, String filePath, String oldUserAvatar);
+
 }

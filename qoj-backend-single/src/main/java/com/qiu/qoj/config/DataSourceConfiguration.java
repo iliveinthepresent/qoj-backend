@@ -13,8 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConfiguration {
-//    @Autowired
-//    private DataSource dataSource;
+
 
     //指定当前对象作为bean
     @Bean("dataSource")

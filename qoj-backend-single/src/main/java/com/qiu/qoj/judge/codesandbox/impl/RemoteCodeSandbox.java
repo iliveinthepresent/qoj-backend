@@ -10,6 +10,7 @@ import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * 远程代码沙箱（实际调用接口的沙箱）
@@ -22,13 +23,13 @@ public class RemoteCodeSandbox implements CodeSandbox {
     private static final String AUTH_REQUEST_SECRET = "secretKey";
 
     @Value("${codesandbox.remote-url}")
-    private String remoteURL;
+    private String url = "http://106.15.195.87:8090/executeCode";
 
 
     @Override
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
         System.out.println("远程代码沙箱");
-        String url = remoteURL;
+
         String json = JSONUtil.toJsonStr(executeCodeRequest);
         String responseStr = HttpUtil.createPost(url)
                 .header(AUTH_REQUEST_HEADER, AUTH_REQUEST_SECRET)

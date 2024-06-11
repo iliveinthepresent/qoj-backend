@@ -103,7 +103,7 @@ public class CommentController {
                                                                  HttpServletRequest request) {
         long current = commentQueryRequest.getCurrent();
         long size = commentQueryRequest.getPageSize();
-        Page<Comment> commentPage = commentService.page(new Page<>(current, size), commentService.getQueryWrapper(commentQueryRequest)
+        Page<Comment> commentPage = commentService.page(new Page<>(current, 20), commentService.getQueryWrapper(commentQueryRequest)
         );
         Page<CommentVO> commentPageVO = commentService.getCommentPageVO(commentPage, request);
         return ResultUtils.success(commentPageVO);

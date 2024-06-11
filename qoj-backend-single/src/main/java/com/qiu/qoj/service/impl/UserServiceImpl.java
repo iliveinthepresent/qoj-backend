@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiu.qoj.common.ErrorCode;
+import com.qiu.qoj.config.CosClientConfig;
 import com.qiu.qoj.constant.CommonConstant;
 import com.qiu.qoj.constant.UserConstant;
 import com.qiu.qoj.exception.BusinessException;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.qiu.qoj.constant.UserConstant.USER_VERVIFICATION_CODE_PREFIX;
+import static com.qiu.qoj.constant.UserConstant.*;
 
 /**
  * 用户服务实现
@@ -45,10 +46,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     private final StringRedisTemplate stringRedisTemplate;
+    private final CosClientConfig cosClientConfig;
     /**
      * 盐值，混淆密码
      */
     private static final String SALT = "qiu";
+
+
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -316,5 +320,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    @Override
+    public void uploadAvatar(User user, String filePath, String oldUserAvatar) {
+        updateById(user);
+        stringRedisTemplate.opsForSet().add(USER_AVATAR_SET, filePath);
+        Integer cosHostLength = cosClientConfig.getHost().length();
+        String oldAvatarPath = oldUserAvatar.substring(cosHostLength + 1);
+        stringRedisTemplate.opsForSet().remove(USER_AVATAR_SET, oldAvatarPath);
+        stringRedisTemplate.opsForSet().add(USER_AVATAR_DB_SET, filePath);
     }
 }

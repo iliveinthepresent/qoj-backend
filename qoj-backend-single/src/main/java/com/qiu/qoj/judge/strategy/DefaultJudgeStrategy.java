@@ -2,6 +2,7 @@ package com.qiu.qoj.judge.strategy;
 
 
 import cn.hutool.json.JSONUtil;
+import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeResponse;
 import com.qiu.qoj.judge.codesandbox.model.JudgeInfo;
 import com.qiu.qoj.model.dto.question.JudgeCase;
 import com.qiu.qoj.model.dto.question.JudgeConfig;
@@ -19,10 +20,11 @@ public class DefaultJudgeStrategy implements JudgeStrategy {
      * 执行判题
      *
      * @param judgeContext
+     * @param executeCodeResponse
      * @return
      */
     @Override
-    public JudgeInfo doJudge(JudgeContext judgeContext) {
+    public JudgeInfo doJudge(JudgeContext judgeContext, ExecuteCodeResponse executeCodeResponse) {
         JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         Long memory = judgeInfo.getMemory();
         Long time = judgeInfo.getTime();

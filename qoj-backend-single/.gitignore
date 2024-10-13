@@ -1,7 +1,7 @@
 ### Custom Template
 .idea
 *.iml
-
+src/main/resources/application.yml
 ### Java template
 # Compiled class file
 *.class

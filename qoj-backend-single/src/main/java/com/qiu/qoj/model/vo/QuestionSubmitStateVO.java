@@ -1,7 +1,7 @@
 package com.qiu.qoj.model.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.qiu.qoj.model.dto.questionsubmint.JudgeInfo;
+import com.qiu.qoj.judge.codesandbox.model.JudgeInfo;
 import lombok.Data;
 
 import java.io.Serializable;

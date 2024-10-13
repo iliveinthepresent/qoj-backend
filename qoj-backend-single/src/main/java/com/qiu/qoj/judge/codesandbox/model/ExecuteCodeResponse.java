@@ -1,10 +1,13 @@
 package com.qiu.qoj.judge.codesandbox.model;
 
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,21 +15,45 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExecuteCodeResponse {
+//    private List<String> outputList;
+//
+//    /**
+//     * 接口信息
+//     */
+//    private String message;
+//
+//    /**
+//     * 执行状态
+//     */
+//    private Integer status;
+//
+//    /**
+//     * 判题信息
+//     */
+//    private JudgeInfo judgeInfo;
 
-    private List<String> outputList;
+    private String compileOutput;
+
+    private String compileErrorOutput;
+
+    private List<String> runOutput = new ArrayList<>();
+
+    private List<String> runErrorOutput = new ArrayList<>();
 
     /**
-     * 接口信息
+     * 消耗内存
      */
-    private String message;
+    private List<Long> memory = new ArrayList<>();
 
     /**
-     * 执行状态
+     * 消耗时间（KB）
      */
-    private Integer status;
-
-    /**
-     * 判题信息
-     */
-    private JudgeInfo judgeInfo;
+    private List<Long> time = new ArrayList<>();
 }
+
+
+
+
+
+
+

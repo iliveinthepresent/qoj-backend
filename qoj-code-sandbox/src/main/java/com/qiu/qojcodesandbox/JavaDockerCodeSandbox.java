@@ -6,8 +6,12 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;
-import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import com.qiu.qojcodesandbox.model.ExecuteCodeRequest;
 import com.qiu.qojcodesandbox.model.ExecuteCodeResponse;
 import com.qiu.qojcodesandbox.model.ExecuteMessage;
@@ -28,7 +32,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
 
     private static final long TIME_OUT = 5000L;
 
-    private static final Boolean FIRST_INIT = true;
+    private static Boolean FIRST_INIT = true;
 
     public static void main(String[] args) {
         JavaDockerCodeSandbox javaNativeCodeSandbox = new JavaDockerCodeSandbox();
@@ -45,6 +49,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
 
     /**
      * 3、创建容器，把文件复制到容器内
+     *
      * @param userCodeFile
      * @param inputList
      * @return
@@ -53,7 +58,22 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
     public List<ExecuteMessage> runFile(File userCodeFile, List<String> inputList) {
         String userCodeParentPath = userCodeFile.getParentFile().getAbsolutePath();
         // 获取默认的 Docker Client
-        DockerClient dockerClient = DockerClientBuilder.getInstance().build();
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost("unix:///var/run/docker.sock")
+//                .withDockerTlsVerify(true)
+//                .withDockerCertPath("/home/user/.docker")
+//                .withRegistryUsername("qyc")
+//                .withRegistryPassword(registryPass)
+//                .withRegistryEmail(registryMail)
+//                .withRegistryUrl(registryUrl)
+                .build();
+
+        DockerHttpClient httpClient = new JerseyDockerHttpClient.Builder()
+                .dockerHost(config.getDockerHost())
+                .sslConfig(config.getSSLConfig())
+                .build();
+
+        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
         // 拉取镜像
         String image = "openjdk:8-alpine";
@@ -74,6 +94,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
                 System.out.println("拉取镜像异常");
                 throw new RuntimeException(e);
             }
+            FIRST_INIT = false;
         }
 
         System.out.println("下载完成");
@@ -107,8 +128,9 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
         List<ExecuteMessage> executeMessageList = new ArrayList<>();
         for (String inputArgs : inputList) {
             StopWatch stopWatch = new StopWatch();
-            String[] inputArgsArray = inputArgs.split(" ");
-            String[] cmdArray = ArrayUtil.append(new String[]{"java", "-cp", "/app", "Main"}, inputArgsArray);
+            String[] inputArgsArray = {"1\n", "3\n"};
+//            String[] inputArgsArray = inputArgs.split(" ");
+            String[] cmdArray = ArrayUtil.append(new String[]{"java", "-cp", "/app", "Main", "\n"}, inputArgsArray);
             ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(containerId)
                     .withCmd(cmdArray)
                     .withAttachStderr(true)
@@ -178,12 +200,17 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
 
                 }
             });
-            statsCmd.exec(statisticsResultCallback);
             try {
+                statsCmd.exec(statisticsResultCallback);
                 stopWatch.start();
+
+                // todo 测试
+                ExecStartCmd execStartCmd = dockerClient.execStartCmd(execId);
+//                String result = execStartCmd.exec(new ExecStartResultCallback()).awaitCompletion().toString();
+//                System.out.println("执行结果: " + result);
                 dockerClient.execStartCmd(execId)
                         .exec(execStartResultCallback)
-                        .awaitCompletion(TIME_OUT, TimeUnit.MICROSECONDS);
+                        .awaitCompletion(TIME_OUT, TimeUnit.MILLISECONDS);
                 stopWatch.stop();
                 time = stopWatch.getLastTaskTimeMillis();
                 statsCmd.close();

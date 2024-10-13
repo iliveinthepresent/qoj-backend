@@ -1,6 +1,7 @@
 package com.qiu.qoj.judge;
 
 
+import com.qiu.qoj.judge.codesandbox.model.ExecuteCodeResponse;
 import com.qiu.qoj.judge.codesandbox.model.JudgeInfo;
 import com.qiu.qoj.judge.strategy.DefaultJudgeStrategy;
 import com.qiu.qoj.judge.strategy.JavaLanguageJudgeStrategy;
@@ -19,16 +20,17 @@ public class JudgeManager {
      * 执行判题
      *
      * @param judgeContext
+     * @param executeCodeResponse
      * @return
      */
-    JudgeInfo doJudge(JudgeContext judgeContext) {
+    JudgeInfo doJudge(JudgeContext judgeContext, ExecuteCodeResponse executeCodeResponse) {
         QuestionSubmit questionSubmit = judgeContext.getQuestionSubmit();
         String language = questionSubmit.getLanguage();
         JudgeStrategy judgeStrategy = new DefaultJudgeStrategy();
         if ("java".equals(language)) {
             judgeStrategy = new JavaLanguageJudgeStrategy();
         }
-        return judgeStrategy.doJudge(judgeContext);
+        return judgeStrategy.doJudge(judgeContext, executeCodeResponse);
     }
 
 }

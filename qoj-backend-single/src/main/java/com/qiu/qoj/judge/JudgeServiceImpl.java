@@ -87,24 +87,43 @@ public class JudgeServiceImpl implements JudgeService {
                 .inputList(inputList)
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
-        List<String> outputList = executeCodeResponse.getOutputList();
+        List<String> outputList = executeCodeResponse.getRunOutput();
+
         // 5）根据沙箱的执行结果，设置题目的判题状态和信息
         JudgeContext judgeContext = new JudgeContext();
-        judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
+        JudgeInfo judgeInfo1 = new JudgeInfo();
+        if(!executeCodeResponse.getTime().isEmpty()) {
+            judgeInfo1.setTime(executeCodeResponse.getTime().get(0));
+        }
+        judgeContext.setJudgeInfo(judgeInfo1);
         judgeContext.setInputList(inputList);
         judgeContext.setOutputList(outputList);
         judgeContext.setJudgeCaseList(judgeCaseList);
         judgeContext.setQuestion(question);
         judgeContext.setQuestionSubmit(questionSubmit);
-        JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
+        JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext, executeCodeResponse);
+        judgeInfo.setInputList(inputList.stream().limit(3).collect(Collectors.toList()));
+        if(!executeCodeResponse.getRunOutput().isEmpty()) {
+            judgeInfo.setRunOutput(executeCodeResponse.getRunOutput().stream().limit(3).collect(Collectors.toList()));
+        }
+        judgeInfo.setAnswers(judgeCaseList.stream().limit(3).map(JudgeCase::getOutput).collect(Collectors.toList()));
+        if(!executeCodeResponse.getRunErrorOutput().isEmpty()) {
+            judgeInfo.setCompileErrorOutput(executeCodeResponse.getRunErrorOutput().get(0));
+        }
+        if(!executeCodeResponse.getCompileErrorOutput().isEmpty()) {
+            judgeInfo.setCompileErrorOutput(executeCodeResponse.getCompileErrorOutput());
+        }
         // 6）修改数据库中的判题结果
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
-        if ("Wrong Answer".equals(judgeInfo.getMessage()) || "编译错误".equals(judgeInfo.getMessage())) {
+        if ("Wrong Answer".equals(judgeInfo.getMessage())) {
             questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
             stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.FAILED.getValue().toString(), 5, TimeUnit.MINUTES);
+        } else if("编译错误".equals(judgeInfo.getMessage())) {
+            questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.COMPILE_ERROR.getValue());
+            stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.COMPILE_ERROR.getValue().toString(), 5, TimeUnit.MINUTES);
 
-        } else {
+        }else {
             questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCESS.getValue());
             stringRedisTemplate.opsForValue().set(submitStateKey, QuestionSubmitStatusEnum.SUCCESS.getValue().toString(), 5, TimeUnit.MINUTES);
             String key = QuestionConstant.QUESTION_ACCEPTED_NUMBER + questionId;

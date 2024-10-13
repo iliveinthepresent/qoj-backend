@@ -2,6 +2,9 @@ package com.qiu.qojcodesandbox.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class JudgeInfo {
 
@@ -13,10 +16,10 @@ public class JudgeInfo {
     /**
      * 消耗内存
      */
-    private Long memory;
+    private List<Long> memory = new ArrayList<>();
 
     /**
      * 消耗时间（KB）
      */
-    private Long time;
+    private List<Long> time = new ArrayList<>();
 }
